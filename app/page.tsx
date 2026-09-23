@@ -43,6 +43,12 @@ const steps = [
   { title: 'Executive synthesis & citation mapping', detail: 'Assembling a concise, decision-ready report.', icon: FileText },
 ]
 
+const suggestedPrompts = [
+  'Analyze the 2026 market adoption trends of PropTech automated CRM workflows.',
+  'Evaluate the cost vs. latency trade-offs of deploying open-source LLMs vs. OpenAI APIs.',
+  'Conduct a competitive feature matrix of AI-driven research assistant tools.',
+]
+
 const sources = [
   ['mckinsey.com', '92%', 'AI adoption is shifting from experimentation to workflow redesign.', 'Enterprise survey'],
   ['hbr.org', '89%', 'The highest-performing teams pair copilots with operating model changes.', 'Research brief'],
@@ -51,7 +57,7 @@ const sources = [
 ]
 
 export default function Page() {
-  const [prompt, setPrompt] = useState('Analyze the enterprise AI adoption landscape in 2025. Identify the most defensible trends, leading use cases, and strategic implications for a B2B SaaS product team.')
+  const [prompt, setPrompt] = useState('')
   const [depth, setDepth] = useState('Deep-Dive Report')
   const [scope, setScope] = useState('Global Web')
   const [running, setRunning] = useState(false)
@@ -99,7 +105,7 @@ export default function Page() {
         <section className="page-heading"><div><div className="eyebrow"><span className="pulse-dot" /> AUTONOMOUS RESEARCH SYSTEM</div><h1>Command center</h1><p>Turn complex questions into decision-ready intelligence.</p></div><button className="outline-button"><Plus /> New research</button></section>
 
         <section className="research-layout">
-          <div className="panel prompt-panel"><div className="panel-heading"><div><span className="panel-kicker">01 / RESEARCH BRIEF</span><h2>What should we investigate?</h2></div><button className="more-button"><MoreHorizontal /></button></div><label className="prompt-label" htmlFor="research-prompt">Research prompt</label><textarea id="research-prompt" value={prompt} onChange={(event) => setPrompt(event.target.value)} /><div className="field-row"><label>Research depth<select value={depth} onChange={(event) => setDepth(event.target.value)}><option>Quick Brief</option><option>Deep-Dive Report</option><option>Market Analysis Matrix</option></select></label><label>Search scope<select value={scope} onChange={(event) => setScope(event.target.value)}><option>Global Web</option><option>Academic</option><option>Tech Blogs</option></select></label></div><div className="prompt-footer"><span><TerminalSquare /> Shift + Enter for new line</span><button className="run-button" onClick={startResearch} disabled={running}>{running ? <LoaderCircle className="spin" /> : <Play />} {running ? 'Researching…' : 'Initialize agent'}<span className="button-kbd">⌘ ↵</span></button></div></div>
+          <div className="panel prompt-panel"><div className="panel-heading"><div><span className="panel-kicker">01 / RESEARCH BRIEF</span><h2>What should we investigate?</h2></div><button className="more-button"><MoreHorizontal /></button></div><label className="prompt-label" htmlFor="research-prompt">Research prompt</label><textarea id="research-prompt" value={prompt} onChange={(event) => setPrompt(event.target.value)} placeholder="Enter your research topic or question (e.g., Analyze the competitive landscape of AI agents in FinTech...)" /><div className="suggested-prompts"><span className="suggested-prompts-title">Suggested Research Prompts</span><div className="prompt-chips">{suggestedPrompts.map((suggestion) => <button type="button" className="prompt-chip" key={suggestion} onClick={() => setPrompt(suggestion)}>{suggestion}</button>)}</div></div><div className="field-row"><label>Research depth<select value={depth} onChange={(event) => setDepth(event.target.value)}><option>Quick Brief</option><option>Deep-Dive Report</option><option>Market Analysis Matrix</option></select></label><label>Search scope<select value={scope} onChange={(event) => setScope(event.target.value)}><option>Global Web</option><option>Academic</option><option>Tech Blogs</option></select></label></div><div className="prompt-footer"><span><TerminalSquare /> Shift + Enter for new line</span><button className="run-button" onClick={startResearch} disabled={running}>{running ? <LoaderCircle className="spin" /> : <Play />} {running ? 'Researching…' : 'Initialize agent'}<span className="button-kbd">⌘ ↵</span></button></div></div>
 
           <div className="panel telemetry-panel"><div className="panel-heading"><div><span className="panel-kicker">02 / LIVE TELEMETRY</span><h2>Agent execution stream</h2></div><span className="streaming-badge"><i /> LIVE</span></div><div className="step-list">{steps.map((step, index) => { const active = running && progress === index; const complete = running && progress > index; const Icon = step.icon; return <div className={`step ${active ? 'active' : ''} ${complete ? 'complete' : ''}`} key={step.title}><div className="step-rail"><div className="step-icon">{complete ? <Check /> : active ? <LoaderCircle className="spin" /> : <Icon />}</div>{index < steps.length - 1 && <div className="rail-line" />}</div><div className="step-copy"><div className="step-title">{step.title}<span>{complete ? 'Complete' : active ? 'Running' : 'Queued'}</span></div><p>{step.detail}</p>{active && <div className="activity"><i /><i /><i /><span>{blacklist && index === 2 ? 'Applying domain blacklist filter…' : strictCitations && index === 3 ? 'Mapping verified URLs to claims…' : 'Working across tool calls'}</span></div>}</div></div> })}</div><div className="telemetry-footer"><span><Database /> 24 tools available</span><span><Clock3 /> Avg. run 02:48</span></div></div>
         </section>
